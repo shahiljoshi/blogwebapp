@@ -1,7 +1,9 @@
 from django.shortcuts import render , get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView ,UpdateView ,DeleteView
 from django.contrib.auth.models import User
-from .models import Post,Category,Comment
+from .models import Post,Comment
+#from .models import Post,Category,Comment
+
 from django.contrib.auth.mixins import LoginRequiredMixin ,  UserPassesTestMixin
 from .forms import PostForm ,AddCommentForm
 from django.http import HttpResponseRedirect
@@ -41,12 +43,12 @@ class PostListView(ListView):
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 5
-
-    def get_context_data(self, *args, **kwargs):
-        cat_menu = Category.objects.all()
-        context = super(PostListView,self).get_context_data(*args, **kwargs)
-        context["cat_menu"] = cat_menu
-        return context
+    #
+    # def get_context_data(self, *args, **kwargs):
+    #     cat_menu = Category.objects.all()
+    #     context = super(PostListView,self).get_context_data(*args, **kwargs)
+    #     context["cat_menu"] = cat_menu
+    #     return context
 
 
 class UserPostListView(ListView):
@@ -60,12 +62,12 @@ class UserPostListView(ListView):
         user = get_object_or_404(User,username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
-
-def categoryview(request,cats):
-
-    category_posts = Post.objects.filter(category=cats)
-    return render(request,'blog/category.html',{'cats':cats,'category_posts':category_posts})
-
+#
+# def categoryview(request,cats):
+#
+#     category_posts = Post.objects.filter(category=cats)
+#     return render(request,'blog/category.html',{'cats':cats,'category_posts':category_posts})
+#
 
 def likeview(request,pk):
     post = get_object_or_404(Post,id=request.POST.get('post_id'))
@@ -82,7 +84,7 @@ class PostDetailView(DetailView):
     model = Post
 
     def get_context_data(self, *args, **kwargs):
-        cat_menu = Category.objects.all()
+        #cat_menu = Category.objects.all()
         context = super(PostDetailView,self).get_context_data(*args, **kwargs)
         stuff = get_object_or_404(Post,id=self.kwargs['pk'])
         total_likes = stuff.total_likes()
@@ -91,7 +93,7 @@ class PostDetailView(DetailView):
         if stuff.likes.filter(id=self.request.user.id).exists():
             liked = True
 
-        context["cat_menu"] = cat_menu
+        #context["cat_menu"] = cat_menu
         context["total_likes"] = total_likes
         context['liked'] = liked
         return context
