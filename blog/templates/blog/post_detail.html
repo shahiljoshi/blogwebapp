@@ -15,7 +15,7 @@
         </div>
         <h2 class="article-title" > {{ object.title }}</h2>
         <p class="article-content">{{ object.content }}</p>
-          <p><b>Category </b>: {{ object.category }}</p>
+{#          <p><b>Category </b>: {{ object.category }}</p>#}
         <br>
         <form action="{% url 'like_post' post.pk %}" method="post">
             {% csrf_token %}
