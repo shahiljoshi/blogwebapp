@@ -62,6 +62,7 @@ class UserPostListView(ListView):
 
 
 def categoryview(request,cats):
+
     category_posts = Post.objects.filter(category=cats)
     return render(request,'blog/category.html',{'cats':cats,'category_posts':category_posts})
 
