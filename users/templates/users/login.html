@@ -24,10 +24,11 @@
             <center> Or</center>
             <div >
                <center> <legend>Login With</legend>
-                <a href="{% provider_login_url "google" google="http://127.0.0.1:8000/accounts/google/login/" next="" %}" type="button" class="col-3 btn btn-danger ">Google</a>
-                <a href="{% provider_login_url 'github' %}" type="button" class="col-3 btn btn-dark">GitHub</a>
-                <a href="{% provider_login_url "facebook" method="oauth2" %}" type="button" class="col-3 btn btn-info">Facebook</a>
+                <a href="{% provider_login_url "google" google="http://127.0.0.1:8000/accounts/google/login/" next="" %}" type="button" class="col-3 btn btn-danger "><p class="fa fa-google"> | </p>Google</a>
+                <a href="{% provider_login_url 'github' %}" type="button" class="col-3 btn btn-dark"><p class="fa fa-github"> |  </p> GitHub</a>
+                <a href="{% provider_login_url "facebook" method="oauth2" %}" type="button" class="col-3 btn btn-info "><p class="fa fa-facebook"> | </p> Facebook</a>
                </center>
+
             </div>
             <br>
         </form>
