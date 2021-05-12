@@ -1,11 +1,14 @@
+import requests
 from django.shortcuts import render , get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView ,UpdateView ,DeleteView
 from django.contrib.auth.models import User
+from setuptools._distutils.command.config import config
+
 from .models import Post,Comment
 #from .models import Post,Category,Comment
 
 from django.contrib.auth.mixins import LoginRequiredMixin ,  UserPassesTestMixin
-from .forms import PostForm ,AddCommentForm
+from .forms import PostForm,AddCommentForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse ,reverse_lazy
 # Create your views here.
@@ -88,16 +91,16 @@ class PostDetailView(DetailView):
         context = super(PostDetailView,self).get_context_data(*args, **kwargs)
         stuff = get_object_or_404(Post,id=self.kwargs['pk'])
         total_likes = stuff.total_likes()
-
+        comments = Comment.objects.all().filter(post_id=self.kwargs['pk'])
         liked = False
         if stuff.likes.filter(id=self.request.user.id).exists():
             liked = True
 
         #context["cat_menu"] = cat_menu
+        context["comments"]=comments
         context["total_likes"] = total_likes
         context['liked'] = liked
         return context
-
 
 
 class AddCommentView(LoginRequiredMixin,CreateView):
