@@ -1,4 +1,6 @@
 #from .models import Post, Category ,Comment
+from builtins import filter
+
 from .models import Post ,Comment
 
 from django import forms
@@ -37,3 +39,7 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
+
+
+class PostSearchForm(forms.Form):
+    q= forms.CharField()

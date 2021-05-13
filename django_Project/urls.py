@@ -49,6 +49,7 @@ urlpatterns = [
 
     path('', include('blog.urls')),
 
+
 ]
 
 if settings.DEBUG:

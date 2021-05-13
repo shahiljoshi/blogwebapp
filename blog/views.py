@@ -8,7 +8,7 @@ from .models import Post,Comment
 #from .models import Post,Category,Comment
 
 from django.contrib.auth.mixins import LoginRequiredMixin ,  UserPassesTestMixin
-from .forms import PostForm,AddCommentForm
+from .forms import PostForm,AddCommentForm,PostSearchForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse ,reverse_lazy
 # Create your views here.
@@ -95,7 +95,7 @@ class PostDetailView(DetailView):
         liked = False
         if stuff.likes.filter(id=self.request.user.id).exists():
             liked = True
-
+        context["user"] = self.request.user
         #context["cat_menu"] = cat_menu
         context["comments"]=comments
         context["total_likes"] = total_likes
@@ -111,7 +111,7 @@ class AddCommentView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
-
+        form.instance.name = self.request.user
         return super().form_valid(form)
 
     success_url = reverse_lazy('blog-home')
@@ -126,6 +126,20 @@ class PostCreateView(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+def post_search(request):
+    form = PostSearchForm()
+    q=''
+    results = []
+    if 'q' in request.GET:
+        form = PostSearchForm(request.GET)
+        if form.is_valid():
+            q=form.cleaned_data['q']
+            results = Post.objects.filter(title__contains=q)
+
+
+
+    return render(request,'blog/search.html',{'form':form,'q':q,'results':results})
 
 
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
